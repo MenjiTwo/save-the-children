@@ -97,32 +97,19 @@ This guide is specifically tailored for Windows environments. If you are a front
 - Ensure you have **Java 22** (or higher) installed and set in your Windows `PATH`.
 - Ensure you have **MySQL 8.0** running on port `3306` with the username `root` and password `root1234`.
 
-#### Step 1: Open PowerShell
-Open your Windows Start Menu, type `PowerShell`, and hit Enter.
-
-#### Step 2: Clone and Setup the Database
-Copy and paste this block into your PowerShell window to clone the repository and inject the database tables/dummy data:
-
+#### Step 1: Clone the Repository
+Open your Windows Start Menu, type `PowerShell`, hit Enter, and run:
 ```powershell
-# 1. Clone the repository to your local machine
 git clone https://github.com/MenjiTwo/save-the-children.git
 cd save-the-children
-
-# 2. Inject the database schema and 10 mock applicants into MySQL
-# (This assumes you have mysql installed and added to your Windows PATH)
-mysql -u root -proot1234 < db\schema.sql
-mysql -u root -proot1234 < db\seed.sql
 ```
 
-#### Step 3: Start the Backend Server
-Now that the database is primed, run this final block in PowerShell to compile the Java code and start the API server:
+#### Step 2: One-Click Setup
+Inside the repository folder, there is an automated script named `setup.bat`. This script acts exactly like a `requirements.txt` installation by downloading all Java dependencies, injecting the database schema, and starting the API server!
 
+Simply double-click **`setup.bat`** from your File Explorer, or run it in PowerShell:
 ```powershell
-# Navigate into the backend directory
-cd backend
-
-# Use the Maven wrapper to clean, compile, and run the Spring Boot application
-.\mvnw.cmd spring-boot:run
+.\setup.bat
 ```
 
 Once the terminal stops scrolling and says `Tomcat started on port 8080`, your backend is fully active!
