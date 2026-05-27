@@ -89,29 +89,46 @@ Accepts a JSON payload representing the applicant. The backend automatically gen
 
 ## 🛠 Setup & Installation
 
-### Quick Start Script for Frontend Developers
-If you already have Java 22+ and MySQL running locally, open your terminal and run this script to instantly clone, build, and start the backend:
+### Quick Start Script (Windows Only)
 
-```bash
-# 1. Clone the repository
+This guide is specifically tailored for Windows environments. If you are a frontend developer, follow these exact steps to get the backend running locally so you can start hitting the APIs.
+
+**Requirements:**
+- Ensure you have **Java 22** (or higher) installed and set in your Windows `PATH`.
+- Ensure you have **MySQL 8.0** running on port `3306` with the username `root` and password `root1234`.
+
+#### Step 1: Open PowerShell
+Open your Windows Start Menu, type `PowerShell`, and hit Enter.
+
+#### Step 2: Clone and Setup the Database
+Copy and paste this block into your PowerShell window to clone the repository and inject the database tables/dummy data:
+
+```powershell
+# 1. Clone the repository to your local machine
 git clone https://github.com/MenjiTwo/save-the-children.git
 cd save-the-children
 
-# 2. (Optional) Run the database scripts if you haven't yet
-# Ensure MySQL is running on port 3306 with user 'root' and password 'root1234'
-# mysql -u root -proot1234 < db/schema.sql
-# mysql -u root -proot1234 < db/seed.sql
+# 2. Inject the database schema and 10 mock applicants into MySQL
+# (This assumes you have mysql installed and added to your Windows PATH)
+mysql -u root -proot1234 < db\schema.sql
+mysql -u root -proot1234 < db\seed.sql
+```
 
-# 3. Start the Spring Boot Backend Server
+#### Step 3: Start the Backend Server
+Now that the database is primed, run this final block in PowerShell to compile the Java code and start the API server:
+
+```powershell
+# Navigate into the backend directory
 cd backend
 
-# On Windows:
+# Use the Maven wrapper to clean, compile, and run the Spring Boot application
 .\mvnw.cmd spring-boot:run
-
-# On Mac/Linux:
-./mvnw spring-boot:run
 ```
-*(The server will boot up and be accessible at `http://localhost:8080/api/applicants`)*
+
+Once the terminal stops scrolling and says `Tomcat started on port 8080`, your backend is fully active!
+
+**Test it in your browser:**
+Navigate to 👉 `http://localhost:8080/api/catalog/skills` to verify the backend is securely returning JSON data.
 
 ### Manual Prerequisites
 *   **Java 22** or higher
