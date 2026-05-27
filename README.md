@@ -89,7 +89,31 @@ Accepts a JSON payload representing the applicant. The backend automatically gen
 
 ## 🛠 Setup & Installation
 
-### Prerequisites
+### Quick Start Script for Frontend Developers
+If you already have Java 22+ and MySQL running locally, open your terminal and run this script to instantly clone, build, and start the backend:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/MenjiTwo/save-the-children.git
+cd save-the-children
+
+# 2. (Optional) Run the database scripts if you haven't yet
+# Ensure MySQL is running on port 3306 with user 'root' and password 'root1234'
+# mysql -u root -proot1234 < db/schema.sql
+# mysql -u root -proot1234 < db/seed.sql
+
+# 3. Start the Spring Boot Backend Server
+cd backend
+
+# On Windows:
+.\mvnw.cmd spring-boot:run
+
+# On Mac/Linux:
+./mvnw spring-boot:run
+```
+*(The server will boot up and be accessible at `http://localhost:8080/api/applicants`)*
+
+### Manual Prerequisites
 *   **Java 22** or higher
 *   **MySQL 8.0** or higher
 *   **Maven** (Optional, the wrapper can be used)
