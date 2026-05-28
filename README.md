@@ -94,45 +94,33 @@ Accepts a JSON payload representing the applicant. The backend automatically gen
 This guide is specifically tailored for Windows environments. If you are a frontend developer, follow these exact steps to get the backend running locally so you can start hitting the APIs.
 
 **Requirements:**
-- Ensure you have **Java 22** (or higher) installed and set in your Windows `PATH`.
-- Ensure you have **MySQL 8.0** running on port `3306` with the username `root` and password `root1234`.
+- **Java 22** (or higher) installed. Download from [https://adoptium.net/](https://adoptium.net/). Make sure to check "Add to PATH" during installation.
+- **MySQL 8.0** running on port `3306`. Works with XAMPP, MySQL Installer, WAMP, or Laragon.
 
 #### Step 1: Clone the Repository
-Open your Windows Start Menu, type `PowerShell`, hit Enter, and run:
+Open PowerShell (Start Menu → type `PowerShell` → Enter) and run:
 ```powershell
 git clone https://github.com/MenjiTwo/save-the-children.git
 cd save-the-children
 ```
 
-#### Step 2: One-Click Setup
-Inside the repository folder, there is an automated script named `setup.bat`. This script acts exactly like a `requirements.txt` installation by downloading all Java dependencies, injecting the database schema, and starting the API server!
-
-Simply double-click **`setup.bat`** from your File Explorer, or run it in PowerShell:
+#### Step 2: Run setup.bat (One-Click Setup)
+Double-click **`setup.bat`** from File Explorer, or run it in PowerShell:
 ```powershell
 .\setup.bat
 ```
 
-Once the terminal stops scrolling and says `Tomcat started on port 8080`, your backend is fully active!
+The script automatically handles everything:
+1. **Validates Java** — checks if Java is installed and provides download links if not.
+2. **Finds MySQL** — auto-detects `mysql.exe` across common installation paths (XAMPP, MySQL Installer, WAMP, Laragon). If it can't find it, it will ask you to paste the path manually.
+3. **Tests MySQL connection** — verifies the credentials work before running any SQL scripts.
+4. **Creates the database** — runs `schema.sql` (8 tables) and `seed.sql` (10 mock applicants + catalog data).
+5. **Downloads Java dependencies** — like running `pip install -r requirements.txt`, but for Java.
+6. **Starts the API server** — boots up the Spring Boot server on port `8080`.
+
+Once the terminal says `Tomcat started on port 8080`, your backend is fully active!
 
 **Test it in your browser:**
-Navigate to 👉 `http://localhost:8080/api/catalog/skills` to verify the backend is securely returning JSON data.
+Navigate to 👉 `http://localhost:8080/api/catalog/skills` to verify the backend is returning JSON data.
 
-### Manual Prerequisites
-*   **Java 22** or higher
-*   **MySQL 8.0** or higher
-*   **Maven** (Optional, the wrapper can be used)
-
-### 1. Database Initialization
-1.  Log in to your local MySQL server using `root` and password `root1234`.
-2.  Navigate to the `db/` folder in this repository.
-3.  Execute `schema.sql` to generate the 8 tables.
-4.  Execute `seed.sql` to populate the catalogs and inject 10 mock applicants.
-
-### 2. Running the Server
-1.  Open a terminal in the `backend/` directory.
-2.  Run the application using Maven:
-    ```bash
-    mvn spring-boot:run
-    ```
-    *(If using the wrapper on Windows: `.\mvnw.cmd spring-boot:run`)*
-3.  The server will initialize Hibernate, validate the schema against the database, and start listening on port `8080`.
+> **Note:** The default MySQL credentials are `root` / `root1234`. If yours are different, edit `backend\src\main\resources\application.properties` before running the script.
