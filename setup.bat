@@ -9,8 +9,6 @@ echo.
 
 REM =====================================================
 REM STEP 0: Detect the script's own directory
-REM This ensures the script works no matter WHERE it is
-REM double-clicked from, even on a different drive letter.
 REM =====================================================
 cd /d "%~dp0"
 
@@ -20,65 +18,75 @@ REM =====================================================
 echo [0/3] Checking prerequisites...
 
 where java >nul 2>nul
-if %errorlevel% neq 0 (
-    if defined JAVA_HOME (
-        if exist "%JAVA_HOME%\bin\java.exe" (
-            echo Found Java at JAVA_HOME: %JAVA_HOME%
-        ) else (
-            echo.
-            echo [ERROR] JAVA_HOME is set to "%JAVA_HOME%" but java.exe was not found there.
-            echo.
-            echo FIX: Install Java 22 or higher from https://adoptium.net/
-            echo      Then set JAVA_HOME to the installation directory.
-            echo.
-            pause
-            exit /b 1
-        )
-    ) else (
-        echo.
-        echo [ERROR] Java is NOT installed or NOT in your PATH.
-        echo.
-        echo FIX: Install Java 22 or higher from https://adoptium.net/
-        echo      Make sure to check "Add to PATH" during installation.
-        echo.
-        pause
-        exit /b 1
-    )
-) else (
-    echo Java found!
-    java -version 2>&1 | findstr /i "version"
-)
+if !errorlevel! equ 0 goto :java_in_path
+
+REM Java not in PATH, check JAVA_HOME
+if not defined JAVA_HOME goto :no_java
+if not exist "%JAVA_HOME%\bin\java.exe" goto :java_home_bad
+echo Found Java at JAVA_HOME: %JAVA_HOME%
+goto :java_ok
+
+:java_in_path
+echo Java found!
+goto :java_ok
+
+:java_home_bad
+echo.
+echo [ERROR] JAVA_HOME is set to "%JAVA_HOME%" but java.exe was not found there.
+echo.
+echo FIX: Install Java 17 or higher from https://adoptium.net/
+echo      Then set JAVA_HOME to the installation directory.
+echo.
+pause
+exit /b 1
+
+:no_java
+echo.
+echo [ERROR] Java is NOT installed or NOT in your PATH.
+echo.
+echo FIX: Install Java 17 or higher from https://adoptium.net/
+echo      Make sure to check "Add to PATH" during installation.
+echo.
+pause
+exit /b 1
+
+:java_ok
+REM Print java version OUTSIDE of any if-block to avoid parentheses issues
+for /f "tokens=*" %%V in ('java -version 2^>^&1 ^| findstr /i "version"') do echo %%V
 echo.
 
 REM =====================================================
 REM STEP 2: Find MySQL executable
-REM Most XAMPP and MySQL installs do NOT add mysql to PATH
-REM so we search common locations automatically.
 REM =====================================================
 set "MYSQL_EXE="
 
 REM Check if mysql is already in PATH
 where mysql >nul 2>nul
-if %errorlevel% equ 0 (
+if !errorlevel! equ 0 (
     set "MYSQL_EXE=mysql"
     goto :mysql_found
 )
 
 REM Search common XAMPP and MySQL installation paths
-for %%P in (
-    "C:\xampp\mysql\bin\mysql.exe"
-    "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe"
-    "C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe"
-    "C:\Program Files (x86)\MySQL\MySQL Server 8.0\bin\mysql.exe"
-    "C:\ProgramData\MySQL\MySQL Server 8.0\bin\mysql.exe"
-    "C:\wamp64\bin\mysql\mysql8.0.31\bin\mysql.exe"
-    "C:\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysql.exe"
-) do (
-    if exist %%P (
-        set "MYSQL_EXE=%%~P"
-        goto :mysql_found
-    )
-)
+set "SEARCH_1=C:\xampp\mysql\bin\mysql.exe"
+set "SEARCH_2=C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe"
+set "SEARCH_3=C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe"
+set "SEARCH_4=C:\Program Files (x86)\MySQL\MySQL Server 8.0\bin\mysql.exe"
+set "SEARCH_5=C:\ProgramData\MySQL\MySQL Server 8.0\bin\mysql.exe"
+set "SEARCH_6=C:\wamp64\bin\mysql\mysql8.0.31\bin\mysql.exe"
+set "SEARCH_7=C:\laragon\bin\mysql\mysql-8.0.30-winx64\bin\mysql.exe"
+set "SEARCH_8=C:\Program Files\MySQL\MySQL Server 9.0\bin\mysql.exe"
+set "SEARCH_9=C:\Program Files\MySQL\MySQL Server 5.7\bin\mysql.exe"
+
+if exist "!SEARCH_1!" set "MYSQL_EXE=!SEARCH_1!" & goto :mysql_found
+if exist "!SEARCH_2!" set "MYSQL_EXE=!SEARCH_2!" & goto :mysql_found
+if exist "!SEARCH_3!" set "MYSQL_EXE=!SEARCH_3!" & goto :mysql_found
+if exist "!SEARCH_4!" set "MYSQL_EXE=!SEARCH_4!" & goto :mysql_found
+if exist "!SEARCH_5!" set "MYSQL_EXE=!SEARCH_5!" & goto :mysql_found
+if exist "!SEARCH_6!" set "MYSQL_EXE=!SEARCH_6!" & goto :mysql_found
+if exist "!SEARCH_7!" set "MYSQL_EXE=!SEARCH_7!" & goto :mysql_found
+if exist "!SEARCH_8!" set "MYSQL_EXE=!SEARCH_8!" & goto :mysql_found
+if exist "!SEARCH_9!" set "MYSQL_EXE=!SEARCH_9!" & goto :mysql_found
 
 REM If still not found, ask the user
 echo.
@@ -91,16 +99,14 @@ echo      C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe
 echo.
 set /p "MYSQL_EXE=Please paste the FULL path to your mysql.exe (or press Enter to skip DB setup): "
 
-if "!MYSQL_EXE!"=="" (
-    echo Skipping database setup. You will need to run schema.sql and seed.sql manually.
-    goto :skip_db
-)
+if "!MYSQL_EXE!"=="" goto :skip_db_setup
+if not exist "!MYSQL_EXE!" goto :mysql_not_found
+goto :mysql_found
 
-if not exist "!MYSQL_EXE!" (
-    echo [ERROR] File not found: !MYSQL_EXE!
-    pause
-    exit /b 1
-)
+:mysql_not_found
+echo [ERROR] File not found: !MYSQL_EXE!
+pause
+exit /b 1
 
 :mysql_found
 echo MySQL found at: !MYSQL_EXE!
@@ -113,38 +119,52 @@ echo [1/3] Setting up the MySQL Database...
 echo      Connecting as root to localhost:3306...
 echo.
 
+REM Test connection first
 "!MYSQL_EXE!" -u root -proot1234 -e "SELECT 1" >nul 2>nul
-if %errorlevel% neq 0 (
-    echo.
-    echo [ERROR] Cannot connect to MySQL with user=root, password=root1234
-    echo.
-    echo Common fixes:
-    echo   1. Make sure MySQL server is RUNNING (check XAMPP Control Panel or Services).
-    echo   2. The default credentials are: username=root, password=root1234
-    echo      If your password is different, edit backend\src\main\resources\application.properties
-    echo.
-    pause
-    exit /b 1
-)
+if !errorlevel! neq 0 goto :mysql_connect_fail
 
+REM Run schema
+echo      Running schema.sql...
 "!MYSQL_EXE!" -u root -proot1234 < db\schema.sql
-if %errorlevel% neq 0 (
-    echo [ERROR] Failed to execute schema.sql
-    pause
-    exit /b 1
-)
+if !errorlevel! neq 0 goto :schema_fail
 
+REM Run seed data
+echo      Running seed.sql...
 "!MYSQL_EXE!" -u root -proot1234 < db\seed.sql
-if %errorlevel% neq 0 (
-    echo [ERROR] Failed to execute seed.sql
-    pause
-    exit /b 1
-)
+if !errorlevel! neq 0 goto :seed_fail
 
 echo Database setup complete! 8 tables created and 10 mock applicants inserted.
 echo.
+goto :db_done
 
-:skip_db
+:mysql_connect_fail
+echo.
+echo [ERROR] Cannot connect to MySQL with user=root, password=root1234
+echo.
+echo Common fixes:
+echo   1. Make sure MySQL server is RUNNING (check XAMPP Control Panel or Services).
+echo   2. The default credentials are: username=root, password=root1234
+echo      If your password is different, edit backend\src\main\resources\application.properties
+echo      AND re-run this script.
+echo.
+pause
+exit /b 1
+
+:schema_fail
+echo [ERROR] Failed to execute schema.sql
+pause
+exit /b 1
+
+:seed_fail
+echo [ERROR] Failed to execute seed.sql
+pause
+exit /b 1
+
+:skip_db_setup
+echo Skipping database setup. You will need to run schema.sql and seed.sql manually.
+echo.
+
+:db_done
 
 REM =====================================================
 REM STEP 4: Install Java Dependencies and Compile
@@ -155,22 +175,25 @@ echo.
 cd /d "%~dp0backend"
 
 call .\mvnw.cmd clean install -DskipTests
-if %errorlevel% neq 0 (
-    echo.
-    echo [ERROR] Maven build failed. Common fixes:
-    echo   1. Make sure you have an internet connection (Maven downloads dependencies).
-    echo   2. Make sure Java 22+ is installed and JAVA_HOME is set correctly.
-    echo   3. If JAVA_HOME has spaces in the path (e.g. "Program Files"), try setting
-    echo      it to the short path or reinstall Java to a path without spaces.
-    echo.
-    pause
-    exit /b 1
-)
+if !errorlevel! neq 0 goto :maven_fail
 
 echo.
 echo Dependencies installed and project compiled successfully!
 echo.
+goto :start_server
 
+:maven_fail
+echo.
+echo [ERROR] Maven build failed. Common fixes:
+echo   1. Make sure you have an internet connection (Maven downloads dependencies).
+echo   2. Make sure Java 17+ is installed and JAVA_HOME is set correctly.
+echo   3. If JAVA_HOME has spaces in the path, try wrapping it in quotes.
+echo   4. Try deleting the ".mvn" folder and re-running this script.
+echo.
+pause
+exit /b 1
+
+:start_server
 REM =====================================================
 REM STEP 5: Start the Spring Boot Server
 REM =====================================================
