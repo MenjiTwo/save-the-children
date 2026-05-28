@@ -116,21 +116,82 @@ REM =====================================================
 REM STEP 3: Setup MySQL Database
 REM =====================================================
 echo [1/3] Setting up the MySQL Database...
-echo      Connecting as root to localhost:3306...
 echo.
 
-REM Test connection first
+set "DB_USER=root"
+set "DB_PASS=root1234"
+
+REM Try default credentials first
+echo      Trying default credentials (root / root1234)...
 "!MYSQL_EXE!" -u root -proot1234 -e "SELECT 1" >nul 2>nul
+if !errorlevel! equ 0 goto :mysql_connected
+
+REM Try root with empty password (common default)
+echo      Default password failed. Trying root with no password...
+"!MYSQL_EXE!" -u root --skip-password -e "SELECT 1" >nul 2>nul
+if !errorlevel! equ 0 (
+    set "DB_PASS="
+    goto :mysql_connected
+)
+
+REM Ask the user for their credentials
+echo.
+echo [WARNING] Could not connect with default credentials.
+echo      Make sure MySQL server is RUNNING first!
+echo.
+echo      Please enter your MySQL credentials below.
+echo.
+set /p "DB_USER=     MySQL username (default: root): "
+if "!DB_USER!"=="" set "DB_USER=root"
+set /p "DB_PASS=     MySQL password (press Enter if no password): "
+
+REM Try user-provided credentials
+if "!DB_PASS!"=="" (
+    "!MYSQL_EXE!" -u !DB_USER! --skip-password -e "SELECT 1" >nul 2>nul
+) else (
+    "!MYSQL_EXE!" -u !DB_USER! -p!DB_PASS! -e "SELECT 1" >nul 2>nul
+)
 if !errorlevel! neq 0 goto :mysql_connect_fail
+
+:mysql_connected
+echo      Connected to MySQL successfully!
+echo.
+
+REM Update application.properties with the correct credentials
+echo      Updating application.properties with your MySQL credentials...
+set "PROPS_FILE=%~dp0backend\src\main\resources\application.properties"
+
+> "!PROPS_FILE!" (
+    echo spring.application.name=infoman-backend
+    echo server.port=8080
+    echo spring.datasource.url=jdbc:mysql://localhost:3306/savethechildren_volunteer_db?useSSL=false^&allowPublicKeyRetrieval=true^&serverTimezone=Asia/Manila
+    echo spring.datasource.username=!DB_USER!
+    echo spring.datasource.password=!DB_PASS!
+    echo spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+    echo spring.jpa.hibernate.ddl-auto=update
+    echo spring.jpa.show-sql=true
+    echo spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+    echo spring.jpa.properties.hibernate.format_sql=true
+)
+echo      application.properties updated!
+echo.
 
 REM Run schema
 echo      Running schema.sql...
-"!MYSQL_EXE!" -u root -proot1234 < db\schema.sql
+if "!DB_PASS!"=="" (
+    "!MYSQL_EXE!" -u !DB_USER! --skip-password < db\schema.sql
+) else (
+    "!MYSQL_EXE!" -u !DB_USER! -p!DB_PASS! < db\schema.sql
+)
 if !errorlevel! neq 0 goto :schema_fail
 
 REM Run seed data
 echo      Running seed.sql...
-"!MYSQL_EXE!" -u root -proot1234 < db\seed.sql
+if "!DB_PASS!"=="" (
+    "!MYSQL_EXE!" -u !DB_USER! --skip-password < db\seed.sql
+) else (
+    "!MYSQL_EXE!" -u !DB_USER! -p!DB_PASS! < db\seed.sql
+)
 if !errorlevel! neq 0 goto :seed_fail
 
 echo Database setup complete! 8 tables created and 10 mock applicants inserted.
@@ -139,13 +200,12 @@ goto :db_done
 
 :mysql_connect_fail
 echo.
-echo [ERROR] Cannot connect to MySQL with user=root, password=root1234
+echo [ERROR] Cannot connect to MySQL with the provided credentials.
 echo.
 echo Common fixes:
 echo   1. Make sure MySQL server is RUNNING (check XAMPP Control Panel or Services).
-echo   2. The default credentials are: username=root, password=root1234
-echo      If your password is different, edit backend\src\main\resources\application.properties
-echo      AND re-run this script.
+echo   2. Double-check your MySQL username and password.
+echo   3. Try connecting manually: mysql -u root -p
 echo.
 pause
 exit /b 1
