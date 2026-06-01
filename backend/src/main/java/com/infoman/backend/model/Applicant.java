@@ -115,10 +115,11 @@ public class Applicant {
     @Column(name = "contact_address", columnDefinition = "TEXT")
     private String contactAddress;
 
-    @ElementCollection
-    @CollectionTable(name = "applicant_Languages", joinColumns = @JoinColumn(name = "applicant_id"))
-    @Column(name = "languages_spoken")
-    private Set<String> languages = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "applicant_Languages",
+            joinColumns = @JoinColumn(name = "applicant_id"),
+            inverseJoinColumns = @JoinColumn(name = "language_code"))
+    private Set<Language> languages = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "applicant_Skills",
@@ -417,11 +418,11 @@ public class Applicant {
         this.contactAddress = contactAddress;
     }
 
-    public Set<String> getLanguages() {
+    public Set<Language> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(Set<String> languages) {
+    public void setLanguages(Set<Language> languages) {
         this.languages = languages;
     }
 

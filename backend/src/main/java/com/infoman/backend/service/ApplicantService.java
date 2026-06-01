@@ -17,13 +17,16 @@ public class ApplicantService {
     private final ApplicantRepository applicantRepository;
     private final SkillRepository skillRepository;
     private final InterestRepository interestRepository;
+    private final LanguageRepository languageRepository;
 
     public ApplicantService(ApplicantRepository applicantRepository,
                             SkillRepository skillRepository,
-                            InterestRepository interestRepository) {
+                            InterestRepository interestRepository,
+                            LanguageRepository languageRepository) {
         this.applicantRepository = applicantRepository;
         this.skillRepository = skillRepository;
         this.interestRepository = interestRepository;
+        this.languageRepository = languageRepository;
     }
 
     public List<Applicant> getAllApplicants() {
@@ -90,7 +93,7 @@ public class ApplicantService {
         }
 
         if (language != null && !language.isEmpty()) {
-            List<Applicant> langResults = applicantRepository.findByLanguages(language);
+            List<Applicant> langResults = applicantRepository.findByLanguages_LanguageCode(language);
             results = intersect(results, langResults);
         }
 
@@ -160,8 +163,9 @@ public class ApplicantService {
         applicant.setContactAddress(request.getContactAddress());
 
         // Resolve languages
-        if (request.getLanguages() != null) {
-            applicant.setLanguages(new HashSet<>(request.getLanguages()));
+        if (request.getLanguageCodes() != null) {
+            Set<Language> languages = new HashSet<>(languageRepository.findAllById(request.getLanguageCodes()));
+            applicant.setLanguages(languages);
         } else {
             applicant.setLanguages(new HashSet<>());
         }

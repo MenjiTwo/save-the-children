@@ -80,27 +80,35 @@ INSERT INTO applicant_Details (
  'Mark Reyes-Boss', 'HR Solutions', 'HR Head', 'Tom Villanueva', '0924 666 7777', 'Husband', '852 Alabang Muntinlupa');
 
 
--- Insert Languages
-INSERT INTO applicant_Languages (applicant_id, languages_spoken) VALUES
-('A001', 'English'),
-('A001', 'Tagalog'),
-('A002', 'English'),
-('A002', 'Tagalog'),
-('A003', 'English'),
-('A003', 'Tagalog'),
-('A004', 'English'),
-('A004', 'Tagalog'),
-('A004', 'Hokkien'),
-('A005', 'English'),
-('A005', 'Cebuano'),
-('A006', 'English'),
-('A006', 'Tagalog'),
-('A007', 'English'),
-('A007', 'Spanish'),
-('A008', 'Tagalog'),
-('A009', 'English'),
-('A010', 'English'),
-('A010', 'Tagalog');
+-- Insert Language Catalog (subset for seed data; the full catalog is auto-populated by ICU4J on app startup)
+INSERT INTO language_Catalog (language_code, language_name) VALUES
+('en', 'English'),
+('tl', 'Tagalog'),
+('ceb', 'Cebuano'),
+('es', 'Spanish'),
+('nan', 'Hokkien');
+
+-- Insert Applicant Languages (now using language codes)
+INSERT INTO applicant_Languages (applicant_id, language_code) VALUES
+('A001', 'en'),
+('A001', 'tl'),
+('A002', 'en'),
+('A002', 'tl'),
+('A003', 'en'),
+('A003', 'tl'),
+('A004', 'en'),
+('A004', 'tl'),
+('A004', 'nan'),
+('A005', 'en'),
+('A005', 'ceb'),
+('A006', 'en'),
+('A006', 'tl'),
+('A007', 'en'),
+('A007', 'es'),
+('A008', 'tl'),
+('A009', 'en'),
+('A010', 'en'),
+('A010', 'tl');
 
 
 -- Insert License and Certifications

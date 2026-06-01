@@ -41,7 +41,7 @@ public class ApplicantRequest {
     private String contactRelationship;
     private String contactAddress;
 
-    private List<String> languages;
+    private List<String> languageCodes;
     private List<String> skillCodes;
     private List<String> interestCodes;
     private LicenseCertificationDTO licenseCertification;
@@ -324,12 +324,12 @@ public class ApplicantRequest {
         this.contactAddress = contactAddress;
     }
 
-    public List<String> getLanguages() {
-        return languages;
+    public List<String> getLanguageCodes() {
+        return languageCodes;
     }
 
-    public void setLanguages(List<String> languages) {
-        this.languages = languages;
+    public void setLanguageCodes(List<String> languageCodes) {
+        this.languageCodes = languageCodes;
     }
 
     public List<String> getSkillCodes() {

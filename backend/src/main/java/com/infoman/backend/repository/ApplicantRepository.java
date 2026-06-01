@@ -14,7 +14,7 @@ public interface ApplicantRepository extends JpaRepository<Applicant, String> {
 
     List<Applicant> findBySkills_SkillCode(String skillCode);
 
-    List<Applicant> findByLanguages(String language);
+    List<Applicant> findByLanguages_LanguageCode(String languageCode);
 
     List<Applicant> findByInterests_InterestCode(String interestCode);
 

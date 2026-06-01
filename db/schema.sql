@@ -56,11 +56,17 @@ CREATE TABLE previous_volunteer_Engagement (
     FOREIGN KEY (applicant_id) REFERENCES applicant_Details(applicant_id) ON DELETE CASCADE
 );
 
+CREATE TABLE language_Catalog (
+    language_code VARCHAR(10) PRIMARY KEY,
+    language_name VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE applicant_Languages (
     applicant_id VARCHAR(10) NOT NULL,
-    languages_spoken VARCHAR(15) NOT NULL,
-    PRIMARY KEY (applicant_id, languages_spoken),
-    FOREIGN KEY (applicant_id) REFERENCES applicant_Details(applicant_id) ON DELETE CASCADE
+    language_code VARCHAR(10) NOT NULL,
+    PRIMARY KEY (applicant_id, language_code),
+    FOREIGN KEY (applicant_id) REFERENCES applicant_Details(applicant_id) ON DELETE CASCADE,
+    FOREIGN KEY (language_code) REFERENCES language_Catalog(language_code) ON DELETE CASCADE
 );
 
 CREATE TABLE skill_Catalog (
