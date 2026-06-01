@@ -125,4 +125,4 @@ Once the terminal says `Tomcat started on port 8080`, your backend is fully acti
 **Test it in your browser:**
 Navigate to 👉 `http://localhost:8080/api/catalog/skills` to verify the backend is returning JSON data.
 
-> **Note:** The default MySQL credentials are `root` / `root1234`. If yours are different, edit `backend\src\main\resources\application.properties` before running the script.
+> **Note:** The script tries the default MySQL credentials (`root` / `root1234` or no password). If they don't work on your machine, the script will **automatically prompt you** to type in your actual MySQL username and password, and will safely update the configuration for you!
