@@ -46,3 +46,4 @@ replay_pid*
 
 # Frontend test folder (omitted per user request)
 frontend/
+test-installation/
