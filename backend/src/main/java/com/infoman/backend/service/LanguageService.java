@@ -31,8 +31,10 @@ public class LanguageService {
      */
     @PostConstruct
     public void seedLanguagesFromICU4J() {
-        if (languageRepository.count() > 0) {
-            return; // Already seeded, skip
+        // seed.sql manually inserts 5 languages for mock applicants.
+        // We only want to skip ICU4J seeding if the full ~180 list is already in there.
+        if (languageRepository.count() > 100) {
+            return; // Full list already seeded, skip
         }
 
         // Collect unique language names to avoid duplicates
