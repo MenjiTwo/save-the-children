@@ -28,6 +28,7 @@ The database (`savethechildren_volunteer_db`) consists of 8 precisely mapped tab
 ### Catalog Entities (Lookup Tables)
 *   `skill_Catalog`: Defines the 11 valid skills (`S01` to `S11`).
 *   `interest_Catalog`: Defines the 3 valid areas of interest (`IC1` to `IC3`).
+*   `language_Catalog`: Defines 180+ real-world languages (auto-populated by ICU4J on startup).
 
 ### Many-to-Many Junction Tables
 *   `applicant_Languages`: Maps applicants to the languages they speak.
@@ -56,7 +57,7 @@ Accepts a JSON payload representing the applicant. The backend automatically gen
       "availabilityOption": "Weekends",
       "hoursPerDay": 8,
       "willingToDeploy": true,
-      "languages": ["English", "Tagalog"],
+      "languageCodes": ["en", "tl"],
       "skillCodes": ["S01", "S05"],
       "interestCodes": ["IC2"],
       "licenseCertification": null,
@@ -83,7 +84,8 @@ Accepts a JSON payload representing the applicant. The backend automatically gen
 ### 4. Fetch Catalogs (Public)
 **GET** `/api/catalog/skills`
 **GET** `/api/catalog/interests`
-*   **Returns**: The predefined JSON list of valid catalog items and their corresponding ID codes.
+**GET** `/api/catalog/languages?search={query}`
+*   **Returns**: The predefined JSON list of valid catalog items and their corresponding ID codes. Note that `/languages` supports an optional `?search=` parameter for frontend dropdown filtering.
 
 ---
 
