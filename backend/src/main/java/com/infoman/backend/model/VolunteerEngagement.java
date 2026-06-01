@@ -25,10 +25,10 @@ public class VolunteerEngagement {
     private String positionHeld;
 
     @Column(name = "length_of_service_from")
-    private Integer lengthOfServiceFrom;
+    private LocalDate lengthOfServiceFrom;
 
     @Column(name = "length_of_service_to")
-    private Integer lengthOfServiceTo;
+    private LocalDate lengthOfServiceTo;
 
     @Column(name = "volunteer_engagement_summary", columnDefinition = "TEXT")
     private String volunteerEngagementSummary;
@@ -68,19 +68,19 @@ public class VolunteerEngagement {
         this.positionHeld = positionHeld;
     }
 
-    public Integer getLengthOfServiceFrom() {
+    public LocalDate getLengthOfServiceFrom() {
         return lengthOfServiceFrom;
     }
 
-    public void setLengthOfServiceFrom(Integer lengthOfServiceFrom) {
+    public void setLengthOfServiceFrom(LocalDate lengthOfServiceFrom) {
         this.lengthOfServiceFrom = lengthOfServiceFrom;
     }
 
-    public Integer getLengthOfServiceTo() {
+    public LocalDate getLengthOfServiceTo() {
         return lengthOfServiceTo;
     }
 
-    public void setLengthOfServiceTo(Integer lengthOfServiceTo) {
+    public void setLengthOfServiceTo(LocalDate lengthOfServiceTo) {
         this.lengthOfServiceTo = lengthOfServiceTo;
     }
 
