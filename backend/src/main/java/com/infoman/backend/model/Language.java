@@ -10,7 +10,7 @@ public class Language {
     @Column(name = "language_code", length = 10)
     private String languageCode;
 
-    @Column(name = "language_name", nullable = false, length = 50)
+    @Column(name = "language_name", nullable = false, length = 15)
     private String languageName;
 
     public Language() {

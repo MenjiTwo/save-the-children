@@ -58,7 +58,7 @@ CREATE TABLE previous_volunteer_Engagement (
 
 CREATE TABLE language_Catalog (
     language_code VARCHAR(10) PRIMARY KEY,
-    language_name VARCHAR(50) NOT NULL
+    language_name VARCHAR(15) NOT NULL
 );
 
 CREATE TABLE applicant_Languages (

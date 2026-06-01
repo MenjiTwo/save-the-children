@@ -53,6 +53,11 @@ public class LanguageService {
                 continue; // Skip if no proper display name
             }
 
+            // Truncate to 15 chars to fit the database limit
+            if (displayName.length() > 15) {
+                displayName = displayName.substring(0, 15);
+            }
+
             // Only keep the base language (avoid duplicates from regional variants)
             if (!uniqueLanguages.containsKey(code)) {
                 uniqueLanguages.put(code, displayName);
