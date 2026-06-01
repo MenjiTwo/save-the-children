@@ -18,7 +18,7 @@ public class LicenseCertification {
     @JsonIgnore
     private Applicant applicant;
 
-    @Column(name = "license_certification")
+    @Column(name = "licenses_certifications")
     private String licenseCertification;
 
     @Column(name = "date_issued")
