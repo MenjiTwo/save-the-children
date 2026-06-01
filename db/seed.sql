@@ -122,11 +122,11 @@ INSERT INTO applicant_licenseCertification (applicant_id, licenses_certification
 
 -- Insert Volunteer Engagements
 INSERT INTO previous_volunteer_Engagement (applicant_id, name_of_company, position_held, length_of_service_from, length_of_service_to, volunteer_engagement_summary) VALUES
-('A001', 'Gawad Kalinga', 'Finance Volunteer', 2018, 2019, 'Assisted in auditing community funds.'),
-('A002', 'Habitat for Humanity', 'Site Engineer', 2019, 2021, 'Supervised volunteer construction teams.'),
-('A004', 'Red Cross', 'Relief Worker', 2015, 2016, 'Helped pack and distribute relief goods.'),
-('A006', 'Code for PH', 'IT Mentor', 2020, 2022, 'Taught basic programming to public school students.'),
-('A010', 'Save the Children', 'HR Volunteer', 2018, 2020, 'Assisted in screening and onboarding new volunteers.');
+('A001', 'Gawad Kalinga', 'Finance Volunteer', '2018-01-10', '2019-06-15', 'Assisted in auditing community funds.'),
+('A002', 'Habitat for Humanity', 'Site Engineer', '2019-03-01', '2021-12-20', 'Supervised volunteer construction teams.'),
+('A004', 'Red Cross', 'Relief Worker', '2015-08-01', '2016-11-30', 'Helped pack and distribute relief goods.'),
+('A006', 'Code for PH', 'IT Mentor', '2020-06-15', '2022-03-30', 'Taught basic programming to public school students.'),
+('A010', 'Save the Children', 'HR Volunteer', '2018-04-01', '2020-09-15', 'Assisted in screening and onboarding new volunteers.');
 
 
 -- Insert Applicant Skills

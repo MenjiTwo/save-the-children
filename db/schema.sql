@@ -50,8 +50,8 @@ CREATE TABLE previous_volunteer_Engagement (
     applicant_id VARCHAR(10) PRIMARY KEY,
     name_of_company VARCHAR(50),
     position_held VARCHAR(20),
-    length_of_service_from INT(4),
-    length_of_service_to INT(4),
+    length_of_service_from DATE,
+    length_of_service_to DATE,
     volunteer_engagement_summary VARCHAR(500),
     FOREIGN KEY (applicant_id) REFERENCES applicant_Details(applicant_id) ON DELETE CASCADE
 );
