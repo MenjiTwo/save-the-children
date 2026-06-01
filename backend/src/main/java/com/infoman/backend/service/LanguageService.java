@@ -43,8 +43,8 @@ public class LanguageService {
 
         for (ULocale locale : ULocale.getAvailableLocales()) {
             String code = locale.getLanguage();
-            if (code == null || code.isEmpty() || code.equals("und")) {
-                continue; // Skip undefined/empty
+            if (code == null || code.isEmpty() || code.equals("und") || code.equals("fil")) {
+                continue; // Skip undefined/empty or Filipino (as requested)
             }
 
             // Truncate code to 5 chars to fit the database limit
