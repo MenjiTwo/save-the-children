@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Language {
 
     @Id
-    @Column(name = "language_code", length = 10)
+    @Column(name = "language_code", length = 5)
     private String languageCode;
 
     @Column(name = "language_name", nullable = false, length = 15)

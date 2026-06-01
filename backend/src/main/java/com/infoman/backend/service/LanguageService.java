@@ -47,6 +47,11 @@ public class LanguageService {
                 continue; // Skip undefined/empty
             }
 
+            // Truncate code to 5 chars to fit the database limit
+            if (code.length() > 5) {
+                code = code.substring(0, 5);
+            }
+
             // Get the English display name for this language
             String displayName = locale.getDisplayLanguage(ULocale.ENGLISH);
             if (displayName == null || displayName.isEmpty() || displayName.equals(code)) {
