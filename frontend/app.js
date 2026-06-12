@@ -15,7 +15,7 @@ async function fetchLanguages() {
         if (response.ok) {
             const data = await response.json();
             // The API returns an object { "en": "English", ... }. We want just the names.
-            availableLanguages = Object.values(data);
+            availableLanguages = Object.values(data).filter(lang => lang !== 'Filipino');
             setupLanguageSearch();
         }
     } catch (e) {
