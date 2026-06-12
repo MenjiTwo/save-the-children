@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Save the Children Philippines - Volunteer Registration">
+    <title>Volunteer Registration | Save the Children</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="https://www.savethechildren.org.ph" class="logo">
+                <img src="logo.svg" alt="Save the Children">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="https://www.savethechildren.org.ph">Home</a></li>
+                    <li><a href="https://www.savethechildren.org.ph/about-us/">About Us</a></li>
+                    <li><button id="btnAdminAuth" class="btn btn-outline" style="min-width: 150px;">Admin Login</button></li>
+
+                    <li><a href="https://donate.savethechildren.org.ph" class="btn btn-primary">Donate</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero hero-small">
+            <div class="container hero-content">
+                <h2>Volunteer With Us</h2>
+                <p>Join our mission to ensure every child has a bright future.</p>
+            </div>
+        </section>
+
+        <!-- Main Volunteer Form -->
+        <section class="form-section" id="registrationSection">
+            <div class="container">
+                <div class="form-wrapper">
+                    <h2 class="section-title">Volunteer Registration Form</h2>
+                    <form id="volunteerForm">
+                        
+                        <!-- Personal Information -->
+                        <fieldset>
+                            <legend>Personal Information</legend>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="firstName">First Name *</label>
+                                    <input type="text" id="firstName" name="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="middleName">Middle Name</label>
+                                    <input type="text" id="middleName" name="middleName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name *</label>
+                                    <input type="text" id="lastName" name="lastName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nickname">Nickname</label>
+                                    <input type="text" id="nickname" name="nickname">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender">Gender *</label>
+                                    <div class="custom-select-container" id="customSelectGender">
+                                        <div class="custom-select-trigger" id="triggerGender">
+                                            <span>Select...</span>
+                                            <span style="font-size: 0.8rem;">▼</span>
+                                        </div>
+                                        <div class="custom-select-options" id="optionsGender">
+                                            <div class="custom-select-option" data-value="Male">Male</div>
+                                            <div class="custom-select-option" data-value="Female">Female</div>
+                                            <div class="custom-select-option" data-value="Other">Other</div>
+                                        </div>
+                                        <input type="hidden" id="gender" name="gender" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="birthdate">Birthdate *</label>
+                                    <input type="text" id="birthdate" name="birthdate" placeholder="YYYY/MM/DD" pattern="\d{4}/\d{2}/\d{2}" maxlength="10" required oninput="this.value = this.value.replace(/[^0-9/]/g, '').replace(/^(\d{4})(\d)/, '$1/$2').replace(/^(\d{4})\/(\d{2})(\d)/, '$1/$2/$3');">
+                                </div>
+                                <div class="form-group span-2">
+                                    <label for="birthplace">Birthplace *</label>
+                                    <input type="text" id="birthplace" name="birthplace" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="citizenship">Citizenship *</label>
+                                    <input type="text" id="citizenship" name="citizenship" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Contact Details -->
+                        <fieldset>
+                            <legend>Contact Details</legend>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="emailAddress">Email Address *</label>
+                                    <input type="email" id="emailAddress" name="emailAddress" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mobilePhone">Mobile Phone *</label>
+                                    <input type="tel" id="mobilePhone" name="mobilePhone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phoneLandline">Phone/Landline</label>
+                                    <input type="tel" id="phoneLandline" name="phoneLandline">
+                                </div>
+                                <div class="form-group span-3">
+                                    <label for="address">Current Address *</label>
+                                    <input type="text" id="address" name="address" required>
+                                </div>
+                                <div class="form-group span-3">
+                                    <label for="permanentAddress">Permanent Address *</label>
+                                    <input type="text" id="permanentAddress" name="permanentAddress" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Physical Details -->
+                        <fieldset>
+                            <legend>Physical Details</legend>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="height">Height (cm) *</label>
+                                    <input type="number" id="height" name="height" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="weight">Weight (kg) *</label>
+                                    <input type="number" id="weight" name="weight" step="0.01" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Education & Employment -->
+                        <fieldset>
+                            <legend>Education & Employment</legend>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="employerName">Name of Employer</label>
+                                    <input type="text" id="employerName" name="employerName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="highestEducLevel">Highest Educational Attainment *</label>
+                                    <div class="custom-select-container" id="customSelectEduc">
+                                        <div class="custom-select-trigger" id="triggerEduc">
+                                            <span>Select...</span>
+                                            <span style="font-size: 0.8rem;">▼</span>
+                                        </div>
+                                        <div class="custom-select-options" id="optionsEduc">
+                                            <div class="custom-select-option" data-value="Post Graduate">Post Graduate</div>
+                                            <div class="custom-select-option" data-value="Tertiary">Tertiary</div>
+                                            <div class="custom-select-option" data-value="Secondary">Secondary</div>
+                                            <div class="custom-select-option" data-value="Elementary">Elementary</div>
+                                        </div>
+                                        <input type="hidden" id="highestEducLevel" name="highestEducLevel" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="educSchoolAndAddress">School Name and Address *</label>
+                                    <input type="text" id="educSchoolAndAddress" name="educSchoolAndAddress" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="educDegree">Degree / Course *</label>
+                                    <input type="text" id="educDegree" name="educDegree" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="educFrom">From Year *</label>
+                                    <input type="number" id="educFrom" name="educFrom" min="1900" max="2100" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="educTo">To Year *</label>
+                                    <input type="number" id="educTo" name="educTo" min="1900" max="2100" required>
+                                </div>
+                                <div class="form-group span-2">
+                                    <label for="licenseCertification">License or Certified Membership to any trade / Profession</label>
+                                    <input type="text" id="licenseCertification" name="licenseCertification">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateIssued">Date of Issue</label>
+                                    <input type="text" id="dateIssued" name="dateIssued" placeholder="YYYY/MM/DD" pattern="\d{4}/\d{2}/\d{2}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9/]/g, '').replace(/^(\d{4})(\d)/, '$1/$2').replace(/^(\d{4})\/(\d{2})(\d)/, '$1/$2/$3');">
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Previous Volunteer Engagement -->
+                        <fieldset>
+                            <legend>Previous Volunteer Engagement</legend>
+                            <div class="form-grid">
+                                <div class="form-group span-2">
+                                    <label for="nameOfCompany">Name of Company/Organization</label>
+                                    <input type="text" id="nameOfCompany" name="nameOfCompany">
+                                </div>
+                                <div class="form-group">
+                                    <label for="positionHeldVE">Position held</label>
+                                    <input type="text" id="positionHeldVE" name="positionHeldVE">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lengthOfServiceFrom">Length of Service From (Year)</label>
+                                    <input type="number" id="lengthOfServiceFrom" name="lengthOfServiceFrom" min="1900" max="2100">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lengthOfServiceTo">Length of Service To (Year)</label>
+                                    <input type="number" id="lengthOfServiceTo" name="lengthOfServiceTo" min="1900" max="2100">
+                                </div>
+                                <div class="form-group span-3">
+                                    <label for="volunteerEngagementSummary">Volunteer Engagement Summary</label>
+                                    <textarea id="volunteerEngagementSummary" name="volunteerEngagementSummary" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 0.9rem; resize: none; overflow-y: auto;"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Volunteer Preferences -->
+                        <fieldset>
+                            <legend>Volunteer Preferences</legend>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="availabilityOption">Availability *</label>
+                                    <div class="custom-select-container" id="customSelectAvail">
+                                        <div class="custom-select-trigger" id="triggerAvail">
+                                            <span>Select...</span>
+                                            <span style="font-size: 0.8rem;">▼</span>
+                                        </div>
+                                        <div class="custom-select-options" id="optionsAvail">
+                                            <div class="custom-select-option" data-value="As Required">As required</div>
+                                            <div class="custom-select-option" data-value="Weekends">Weekends</div>
+                                            <div class="custom-select-option" data-value="After Office Hours">After Office Hours</div>
+                                            <div class="custom-select-option" data-value="Holidays">Holidays</div>
+                                            <div class="custom-select-option" data-value="Days of the Week">Days of the Week</div>
+                                        </div>
+                                        <input type="hidden" id="availabilityOption" name="availabilityOption" required>
+                                    </div>
+                                    <input type="number" id="daysOfWeekInput" style="display: none; margin-top: 10px;" placeholder="Number of days" min="1" max="7">
+                                </div>
+                                <div class="form-group span-2">
+                                    <label for="hoursPerDay">Number of Hours per day or per engagement *</label>
+                                    <input type="number" id="hoursPerDay" name="hoursPerDay" min="1" max="24" required>
+                                </div>
+                                <div class="form-group checkbox-group span-3" style="justify-content: flex-start; align-items: flex-start; gap: 15px;">
+                                    <label>
+                                        <input type="checkbox" id="willingToDeploy" name="willingToDeploy">
+                                        Willing to be deployed anywhere in the country?
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="willingHumanitarian" name="willingHumanitarian">
+                                        Willing to work in Humanitarian Response?
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Skills, Languages & Interests -->
+                        <fieldset>
+                            <legend>Skills, Languages & Interests</legend>
+                            
+                            <div class="form-group margin-bottom-20">
+                                <label>Language / Dialect Spoken *</label>
+                                <div class="custom-multiselect">
+                                    <input type="text" id="languageSearch" placeholder="Type to search and select languages..." autocomplete="off">
+                                    <div class="dropdown-list" id="languageDropdown" style="display: none;">
+                                        <!-- Populated via JS -->
+                                    </div>
+                                    <div class="selected-tags" id="selectedLanguages">
+                                        <!-- Selected tags appear here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group margin-bottom-20">
+                                <label>Skills *</label>
+                                <div class="checkbox-grid" id="skillCheckboxes">
+                                    <span>Loading skills...</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Areas of Interest *</label>
+                                <div class="checkbox-grid" id="interestCheckboxes">
+                                    <span>Loading interests...</span>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Emergency Contact Person / References -->
+                        <fieldset>
+                            <legend>Emergency Contact Person</legend>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="contactPerson">Contact Person Name *</label>
+                                    <input type="text" id="contactPerson" name="contactPerson" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactRelationship">Relationship *</label>
+                                    <input type="text" id="contactRelationship" name="contactRelationship" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactPhoneNo">Contact Mobile Phone *</label>
+                                    <input type="tel" id="contactPhoneNo" name="contactPhoneNo" required>
+                                </div>
+                                <div class="form-group span-3">
+                                    <label for="contactAddress">Contact Address *</label>
+                                    <input type="text" id="contactAddress" name="contactAddress" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Reference Person</legend>
+                            <div class="form-grid" style="grid-template-columns: 2fr 1fr 1fr;">
+                                <div class="form-group">
+                                    <label for="referenceNameRelationship">Reference Name & Relationship *</label>
+                                    <input type="text" id="referenceNameRelationship" name="referenceNameRelationship" required placeholder="e.g. John Doe - Colleague">
+                                </div>
+                                <div class="form-group">
+                                    <label for="companyOrgInfo">Company / Organization Name *</label>
+                                    <input type="text" id="companyOrgInfo" name="companyOrgInfo" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="position">Business, Occupation (Position) *</label>
+                                    <input type="text" id="position" name="position" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-large" id="btnSubmit">Submit Registration</button>
+                            <div id="formMessage" class="form-message"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Section (Hidden by Default) -->
+        <section class="admin-section" id="adminDashboard" style="display: none;">
+            <div class="container">
+                <div class="admin-header">
+                    <h2 class="section-title" style="margin-bottom: 0;">Admin Dashboard</h2>
+                    <div class="admin-controls">
+                        <input type="text" id="adminSearch" placeholder="Search by ID, name, or email..." class="search-input">
+                        <button id="btnRefreshApplicants" class="btn btn-primary">Refresh Data</button>
+                        <button id="btnDeleteSelected" class="btn btn-danger">Delete Selected</button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="applicantsTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px; text-align: center;"><input type="checkbox" id="selectAllApplicants"></th>
+                                <th class="sortable" data-sort="applicantId">ID ⇕</th>
+                                <th class="sortable" data-sort="lastName">Name ⇕</th>
+                                <th class="sortable" data-sort="emailAddress">Email ⇕</th>
+                                <th class="sortable" data-sort="mobilePhone">Mobile ⇕</th>
+                                <th>Skills/Interests</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicantsTableBody">
+                            <tr><td colspan="7" class="text-center">Click refresh to load applicants.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Admin Login Modal -->
+    <div class="modal-overlay" id="adminLoginModal">
+        <div class="modal-content">
+            <h3 style="color: var(--primary-red); margin-bottom: 20px; font-size: 1.8rem; text-align: center;">Admin Login</h3>
+
+            <div class="form-group margin-bottom-20">
+                <label for="adminUsername">Username</label>
+                <input type="text" id="adminUsername">
+            </div>
+            <div class="form-group margin-bottom-20">
+                <label for="adminPassword">Password</label>
+                <input type="password" id="adminPassword">
+            </div>
+            <p id="loginError" class="text-danger margin-bottom-20" style="display: none;">Invalid credentials.</p>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="btnCancelLogin" class="btn btn-outline">Cancel</button>
+                <button id="btnSubmitLogin" class="btn btn-primary">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Applicant Modal -->
+    <div class="modal-overlay" id="editApplicantModal">
+        <div class="modal-content modal-large">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: var(--primary-red); margin-bottom: 15px;">Edit Applicant Data</h2>
+                <button id="btnCloseEditModal" class="btn btn-outline btn-small">X</button>
+            </div>
+            
+            <div class="edit-form-container">
+                <!-- We will populate this dynamically in JS to edit any field -->
+
+                <div id="editFormContent" class="form-grid"></div>
+            </div>
+            
+            <div class="form-actions" style="margin-top: 20px; text-align: right;">
+                <button id="btnSaveEdit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Save the Children Philippines. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
