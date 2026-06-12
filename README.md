@@ -104,7 +104,7 @@ git clone https://github.com/MenjiTwo/save-the-children.git
 cd save-the-children
 ```
 
-#### Step 2: Run setup.bat (One-Click Setup)
+#### Step 2: Run setup.bat (First-Time Setup)
 Double-click **`setup.bat`** from File Explorer, or run it in PowerShell:
 ```powershell
 .\setup.bat
@@ -113,14 +113,17 @@ Double-click **`setup.bat`** from File Explorer, or run it in PowerShell:
 The script automatically handles everything:
 1. **Validates Java** — checks if Java is installed and provides download links if not.
 2. **Finds MySQL** — auto-detects `mysql.exe` across common installation paths (XAMPP, MySQL Installer, WAMP, Laragon). If it can't find it, it will ask you to paste the path manually.
-3. **Tests MySQL connection** — verifies the credentials work before running any SQL scripts.
-4. **Creates the database** — runs `schema.sql` (8 tables) and `seed.sql` (10 mock applicants + catalog data).
+3. **Tests MySQL connection** — verifies the credentials work before running any SQL scripts. If the defaults (`root` / `root1234` or no password) don't work, it will **automatically prompt you** for your actual MySQL credentials.
+4. **Asks to reset the database** — you can choose to wipe and reload mock data, or keep your existing data.
 5. **Downloads Java dependencies** — like running `pip install -r requirements.txt`, but for Java.
 6. **Starts the API server** — boots up the Spring Boot server on port `8080`.
+7. **Opens the frontend** — automatically opens `frontend/index.html` in your browser once the server is ready.
 
-Once the terminal says `Tomcat started on port 8080`, your backend is fully active!
+Once the terminal says `Tomcat started on port 8080`, the backend is active and the frontend will open automatically!
 
-**Test it in your browser:**
-Navigate to 👉 `http://localhost:8080/api/catalog/skills` to verify the backend is returning JSON data.
-
-> **Note:** The default MySQL credentials are `root` / `root1234`. If yours are different, edit `backend\src\main\resources\application.properties` before running the script.
+#### Step 3: Run the App (After First-Time Setup)
+After the initial setup, you no longer need to run `setup.bat` again. Just use:
+```powershell
+.\run.bat
+```
+This starts the backend server and automatically opens the frontend in your browser — no database setup needed.
