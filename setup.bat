@@ -176,6 +176,15 @@ set "PROPS_FILE=%~dp0backend\src\main\resources\application.properties"
 echo      application.properties updated!
 echo.
 
+REM Ask user before wiping database
+echo.
+set /p "RESET_DB=Do you want to wipe the database and reload mock data? (Y/N, default N): "
+if /i "!RESET_DB!" neq "Y" (
+    echo      Skipping database reset. Your data is safe!
+    echo.
+    goto :db_done
+)
+
 REM Run schema
 echo      Running schema.sql...
 if "!DB_PASS!"=="" (
@@ -265,6 +274,9 @@ echo.
 echo    Press Ctrl+C to stop the server.
 echo ===================================================
 echo.
+
+REM Launch a background process to wait 8 seconds (allowing Spring Boot to start), then open the frontend automatically
+start /b cmd /c "timeout /t 8 /nobreak >nul & start """" ""%~dp0frontend\index.html"""
 
 call .\mvnw.cmd spring-boot:run
 

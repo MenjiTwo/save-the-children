@@ -8,7 +8,7 @@ The system is built on a 3-tier architecture, currently exposing the Database an
 
 1. **Database Layer (MySQL 8.0)**: A fully normalized 3rd Normal Form (3NF) relational database.
 2. **Application Layer (Spring Boot 3.2)**: A Java-based REST API utilizing Spring Data JPA (Hibernate) for robust ORM mapping, input validation, and business logic enforcement.
-3. **Frontend Layer (TBD)**: The API is configured with Cross-Origin Resource Sharing (CORS) to accept requests from any Javascript-based frontend application (React, Vue, Next.js).
+3. **Frontend Layer**: A vanilla HTML/CSS/JS frontend application located in the `frontend/` directory. The API is configured with Cross-Origin Resource Sharing (CORS) to accept requests smoothly.
 
 ---
 

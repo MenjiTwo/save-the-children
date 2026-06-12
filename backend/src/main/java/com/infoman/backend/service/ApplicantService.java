@@ -200,8 +200,8 @@ public class ApplicantService {
             VolunteerEngagement ve = new VolunteerEngagement();
             ve.setNameOfCompany(dto.getNameOfCompany());
             ve.setPositionHeld(dto.getPositionHeld());
-            ve.setLengthOfServiceFrom(dto.getLengthOfServiceFrom());
-            ve.setLengthOfServiceTo(dto.getLengthOfServiceTo());
+            ve.setLengthOfServiceFrom(dto.getLengthOfServiceFrom() != null ? java.time.LocalDate.of(dto.getLengthOfServiceFrom(), 1, 1) : null);
+            ve.setLengthOfServiceTo(dto.getLengthOfServiceTo() != null ? java.time.LocalDate.of(dto.getLengthOfServiceTo(), 1, 1) : null);
             ve.setVolunteerEngagementSummary(dto.getVolunteerEngagementSummary());
             ve.setApplicant(applicant);
             applicant.setVolunteerEngagement(ve);
