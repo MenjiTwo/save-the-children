@@ -5,8 +5,24 @@ let sortCol = 'applicantId';
 let sortAsc = true;
 let availableLanguages = [];
 let selectedLanguagesList = [];
-let globalSkills = [];
-let globalInterests = [];
+let globalSkills = [
+    {skillCode: "S01", acquiredSkills: "Accounting & Finance"},
+    {skillCode: "S02", acquiredSkills: "Arts & Communication & Graphics"},
+    {skillCode: "S03", acquiredSkills: "Management"},
+    {skillCode: "S04", acquiredSkills: "Engineering"},
+    {skillCode: "S05", acquiredSkills: "Human Resources"},
+    {skillCode: "S06", acquiredSkills: "Law"},
+    {skillCode: "S07", acquiredSkills: "Marketing"},
+    {skillCode: "S08", acquiredSkills: "Livelihoods"},
+    {skillCode: "S09", acquiredSkills: "Training and Facilitation"},
+    {skillCode: "S10", acquiredSkills: "Networking, IT & Programming Skills"},
+    {skillCode: "S11", acquiredSkills: "Emergency Response"}
+];
+let globalInterests = [
+    {interestCode: "IC1", areasOfInterest: "Program Quality and Development Support"},
+    {interestCode: "IC2", areasOfInterest: "Project Implementation Support"},
+    {interestCode: "IC3", areasOfInterest: "Office Support"}
+];
 
 // Utility: Fetch Languages Catalog (from open source API)
 async function fetchLanguages() {
@@ -150,18 +166,27 @@ function setupLanguageSearch() {
 }
 
 // Utility: Fetch Catalogs and Populate Form Checkboxes
-async function fetchCatalogs(retries = 3) {
+async function fetchCatalogs(retries = 10) {
     try {
         // Fetch Skills
         const skillsResponse = await fetch(`${API_BASE}/catalog/skills`);
         if (skillsResponse.ok) {
             globalSkills = await skillsResponse.json();
             const skillContainer = document.getElementById('skillCheckboxes');
+            
+            // PRESERVE edge case: save what the user already clicked
+            const selectedSkills = getSelectedCheckboxes('skillCodes');
+            
             skillContainer.innerHTML = ''; 
             globalSkills.forEach(skill => {
                 const label = document.createElement('label');
                 label.innerHTML = `<input type="checkbox" name="skillCodes" value="${skill.skillCode}"> ${skill.acquiredSkills}`;
                 skillContainer.appendChild(label);
+            });
+            
+            // Restore user selections
+            document.querySelectorAll(`input[name="skillCodes"]`).forEach(cb => {
+                if (selectedSkills.includes(cb.value)) cb.checked = true;
             });
         }
 
@@ -170,12 +195,20 @@ async function fetchCatalogs(retries = 3) {
         if (interestsResponse.ok) {
             globalInterests = await interestsResponse.json();
             const interestContainer = document.getElementById('interestCheckboxes');
+            
+            // PRESERVE edge case: save what the user already clicked
+            const selectedInterests = getSelectedCheckboxes('interestCodes');
+            
             interestContainer.innerHTML = ''; 
             globalInterests.forEach(interest => {
                 const label = document.createElement('label');
-                // Note: Updated to correctly use areasOfInterest based on the backend model
                 label.innerHTML = `<input type="checkbox" name="interestCodes" value="${interest.interestCode}"> ${interest.areasOfInterest}`;
                 interestContainer.appendChild(label);
+            });
+            
+            // Restore user selections
+            document.querySelectorAll(`input[name="interestCodes"]`).forEach(cb => {
+                if (selectedInterests.includes(cb.value)) cb.checked = true;
             });
         }
     } catch (error) {
@@ -185,15 +218,7 @@ async function fetchCatalogs(retries = 3) {
             await new Promise(resolve => setTimeout(resolve, 2000));
             return fetchCatalogs(retries - 1);
         }
-        // Show error in the UI instead of leaving "Loading..."
-        const skillContainer = document.getElementById('skillCheckboxes');
-        const interestContainer = document.getElementById('interestCheckboxes');
-        if (skillContainer && skillContainer.textContent.includes('Loading')) {
-            skillContainer.innerHTML = '<span style="color: #c0392b;">Failed to load skills. Please refresh the page.</span>';
-        }
-        if (interestContainer && interestContainer.textContent.includes('Loading')) {
-            interestContainer.innerHTML = '<span style="color: #c0392b;">Failed to load interests. Please refresh the page.</span>';
-        }
+        // If all retries fail, silently fall back to the hardcoded defaults already on screen.
     }
 }
 
@@ -623,11 +648,11 @@ window.editApplicant = function(id) {
         </div>
         <div class="form-group margin-bottom-20">
             <label>Height (cm)</label>
-            <input type="number" step="0.01" id="editHeight" value="${app.height || ''}">
+            <input type="number" step="0.01" min="0" id="editHeight" value="${app.height || ''}" oninput="if(this.value < 0) this.value = Math.abs(this.value);">
         </div>
         <div class="form-group margin-bottom-20">
             <label>Weight (kg)</label>
-            <input type="number" step="0.01" id="editWeight" value="${app.weight || ''}">
+            <input type="number" step="0.01" min="0" id="editWeight" value="${app.weight || ''}" oninput="if(this.value < 0) this.value = Math.abs(this.value);">
         </div>
 
         <div class="form-group margin-bottom-20 span-3">
@@ -1014,6 +1039,29 @@ function setupCustomDropdowns() {
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
     fetchLanguages();
+
+    // Render skills & interests immediately from hardcoded defaults
+    // so the page doesn't show "Loading..." while waiting for the API
+    const skillContainer = document.getElementById('skillCheckboxes');
+    if (skillContainer) {
+        skillContainer.innerHTML = '';
+        globalSkills.forEach(skill => {
+            const label = document.createElement('label');
+            label.innerHTML = `<input type="checkbox" name="skillCodes" value="${skill.skillCode}"> ${skill.acquiredSkills}`;
+            skillContainer.appendChild(label);
+        });
+    }
+    const interestContainer = document.getElementById('interestCheckboxes');
+    if (interestContainer) {
+        interestContainer.innerHTML = '';
+        globalInterests.forEach(interest => {
+            const label = document.createElement('label');
+            label.innerHTML = `<input type="checkbox" name="interestCodes" value="${interest.interestCode}"> ${interest.areasOfInterest}`;
+            interestContainer.appendChild(label);
+        });
+    }
+
+    // Still fetch from API in background to silently update if DB data changes
     fetchCatalogs();
     setupAdminLogin();
     setupAdminDashboard();
