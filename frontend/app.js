@@ -5,6 +5,16 @@ let sortCol = 'applicantId';
 let sortAsc = true;
 let availableLanguages = [];
 let selectedLanguagesList = [];
+const languageAliases = {
+    'Chinese': ['Mandarin', 'Cantonese', 'Simplified', 'Traditional'],
+    'Tagalog': ['Filipino'],
+    'Persian': ['Farsi'],
+    'Spanish': ['Castilian'],
+    'French': ['Francais', 'Français'],
+    'German': ['Deutsch'],
+    'Dutch': ['Flemish'],
+    'Greek': ['Hellenic']
+};
 let globalSkills = [
     {skillCode: "S01", acquiredSkills: "Accounting & Finance"},
     {skillCode: "S02", acquiredSkills: "Arts & Communication & Graphics"},
@@ -105,7 +115,12 @@ function setupLanguageSearch() {
         const lowerQuery = query.toLowerCase();
         
         const filtered = availableLanguages
-            .filter(lang => !selectedLanguagesList.includes(lang) && lang.toLowerCase().includes(lowerQuery))
+            .filter(lang => {
+                if (selectedLanguagesList.includes(lang)) return false;
+                if (lang.toLowerCase().includes(lowerQuery)) return true;
+                const aliases = languageAliases[lang] || [];
+                return aliases.some(a => a.toLowerCase().includes(lowerQuery));
+            })
             .slice(0, 50);
 
         if (filtered.length === 0) {
@@ -861,7 +876,12 @@ window.editApplicant = function(id) {
         const lowerQuery = query.toLowerCase();
         
         const filtered = availableLanguages
-            .filter(lang => !window.editSelectedLanguagesList.includes(lang) && lang.toLowerCase().includes(lowerQuery))
+            .filter(lang => {
+                if (window.editSelectedLanguagesList.includes(lang)) return false;
+                if (lang.toLowerCase().includes(lowerQuery)) return true;
+                const aliases = languageAliases[lang] || [];
+                return aliases.some(a => a.toLowerCase().includes(lowerQuery));
+            })
             .slice(0, 50);
 
         if (filtered.length === 0) {
