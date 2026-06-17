@@ -150,7 +150,7 @@ function setupLanguageSearch() {
 }
 
 // Utility: Fetch Catalogs and Populate Form Checkboxes
-async function fetchCatalogs() {
+async function fetchCatalogs(retries = 3) {
     try {
         // Fetch Skills
         const skillsResponse = await fetch(`${API_BASE}/catalog/skills`);
@@ -180,6 +180,20 @@ async function fetchCatalogs() {
         }
     } catch (error) {
         console.error("Error fetching catalogs:", error);
+        if (retries > 0) {
+            console.log(`Retrying fetchCatalogs in 2 seconds... (${retries} retries left)`);
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            return fetchCatalogs(retries - 1);
+        }
+        // Show error in the UI instead of leaving "Loading..."
+        const skillContainer = document.getElementById('skillCheckboxes');
+        const interestContainer = document.getElementById('interestCheckboxes');
+        if (skillContainer && skillContainer.textContent.includes('Loading')) {
+            skillContainer.innerHTML = '<span style="color: #c0392b;">Failed to load skills. Please refresh the page.</span>';
+        }
+        if (interestContainer && interestContainer.textContent.includes('Loading')) {
+            interestContainer.innerHTML = '<span style="color: #c0392b;">Failed to load interests. Please refresh the page.</span>';
+        }
     }
 }
 
