@@ -16,22 +16,22 @@ const languageAliases = {
     'Greek': ['Hellenic']
 };
 let globalSkills = [
-    {skillCode: "S01", acquiredSkills: "Accounting & Finance"},
-    {skillCode: "S02", acquiredSkills: "Arts & Communication & Graphics"},
-    {skillCode: "S03", acquiredSkills: "Management"},
-    {skillCode: "S04", acquiredSkills: "Engineering"},
-    {skillCode: "S05", acquiredSkills: "Human Resources"},
-    {skillCode: "S06", acquiredSkills: "Law"},
-    {skillCode: "S07", acquiredSkills: "Marketing"},
-    {skillCode: "S08", acquiredSkills: "Livelihoods"},
-    {skillCode: "S09", acquiredSkills: "Training and Facilitation"},
-    {skillCode: "S10", acquiredSkills: "Networking, IT & Programming Skills"},
-    {skillCode: "S11", acquiredSkills: "Emergency Response"}
+    { skillCode: "S01", acquiredSkills: "Accounting & Finance" },
+    { skillCode: "S02", acquiredSkills: "Arts & Communication & Graphics" },
+    { skillCode: "S03", acquiredSkills: "Management" },
+    { skillCode: "S04", acquiredSkills: "Engineering" },
+    { skillCode: "S05", acquiredSkills: "Human Resources" },
+    { skillCode: "S06", acquiredSkills: "Law" },
+    { skillCode: "S07", acquiredSkills: "Marketing" },
+    { skillCode: "S08", acquiredSkills: "Livelihoods" },
+    { skillCode: "S09", acquiredSkills: "Training and Facilitation" },
+    { skillCode: "S10", acquiredSkills: "Networking, IT & Programming Skills" },
+    { skillCode: "S11", acquiredSkills: "Emergency Response" }
 ];
 let globalInterests = [
-    {interestCode: "IC1", areasOfInterest: "Program Quality and Development Support"},
-    {interestCode: "IC2", areasOfInterest: "Project Implementation Support"},
-    {interestCode: "IC3", areasOfInterest: "Office Support"}
+    { interestCode: "IC1", areasOfInterest: "Program Quality and Development Support" },
+    { interestCode: "IC2", areasOfInterest: "Project Implementation Support" },
+    { interestCode: "IC3", areasOfInterest: "Office Support" }
 ];
 
 // Utility: Fetch Languages Catalog (from open source API)
@@ -113,7 +113,7 @@ function setupLanguageSearch() {
     const renderDropdown = (query = '') => {
         dropdown.innerHTML = '';
         const lowerQuery = query.toLowerCase();
-        
+
         const filtered = availableLanguages
             .filter(lang => {
                 if (selectedLanguagesList.includes(lang)) return false;
@@ -132,7 +132,7 @@ function setupLanguageSearch() {
             const div = document.createElement('div');
             div.textContent = lang;
             div.addEventListener('mousedown', (e) => {
-                e.preventDefault(); 
+                e.preventDefault();
                 addLanguageTag(lang);
                 searchInput.value = '';
                 dropdown.style.display = 'none';
@@ -188,17 +188,17 @@ async function fetchCatalogs(retries = 10) {
         if (skillsResponse.ok) {
             globalSkills = await skillsResponse.json();
             const skillContainer = document.getElementById('skillCheckboxes');
-            
+
             // PRESERVE edge case: save what the user already clicked
             const selectedSkills = getSelectedCheckboxes('skillCodes');
-            
-            skillContainer.innerHTML = ''; 
+
+            skillContainer.innerHTML = '';
             globalSkills.forEach(skill => {
                 const label = document.createElement('label');
                 label.innerHTML = `<input type="checkbox" name="skillCodes" value="${skill.skillCode}"> ${skill.acquiredSkills}`;
                 skillContainer.appendChild(label);
             });
-            
+
             // Restore user selections
             document.querySelectorAll(`input[name="skillCodes"]`).forEach(cb => {
                 if (selectedSkills.includes(cb.value)) cb.checked = true;
@@ -210,17 +210,17 @@ async function fetchCatalogs(retries = 10) {
         if (interestsResponse.ok) {
             globalInterests = await interestsResponse.json();
             const interestContainer = document.getElementById('interestCheckboxes');
-            
+
             // PRESERVE edge case: save what the user already clicked
             const selectedInterests = getSelectedCheckboxes('interestCodes');
-            
-            interestContainer.innerHTML = ''; 
+
+            interestContainer.innerHTML = '';
             globalInterests.forEach(interest => {
                 const label = document.createElement('label');
                 label.innerHTML = `<input type="checkbox" name="interestCodes" value="${interest.interestCode}"> ${interest.areasOfInterest}`;
                 interestContainer.appendChild(label);
             });
-            
+
             // Restore user selections
             document.querySelectorAll(`input[name="interestCodes"]`).forEach(cb => {
                 if (selectedInterests.includes(cb.value)) cb.checked = true;
@@ -253,6 +253,15 @@ async function handleFormSubmit(e) {
     try {
         const skillCodes = getSelectedCheckboxes('skillCodes');
         const interestCodes = getSelectedCheckboxes('interestCodes');
+        const mobilePhoneVal = document.getElementById('mobilePhone').value.trim();
+        if (!/^\d{11}$/.test(mobilePhoneVal)) {
+            throw new Error("Please enter exactly 11 digits for the mobile phone number.");
+        }
+        
+        const contactPhoneNoVal = document.getElementById('contactPhoneNo').value.trim();
+        if (!/^\d{11}$/.test(contactPhoneNoVal)) {
+            throw new Error("Please enter exactly 11 digits for the emergency contact mobile phone number.");
+        }
         if (skillCodes.length === 0) {
             throw new Error("Please select at least one skill.");
         }
@@ -286,7 +295,7 @@ async function handleFormSubmit(e) {
             educFrom: parseInt(document.getElementById('educFrom').value, 10),
             educTo: parseInt(document.getElementById('educTo').value, 10),
 
-            availabilityOption: document.getElementById('availabilityOption').value === 'Days of the Week' 
+            availabilityOption: document.getElementById('availabilityOption').value === 'Days of the Week'
                 ? 'Days of the Week - ' + document.getElementById('daysOfWeekInput').value
                 : document.getElementById('availabilityOption').value,
             hoursPerDay: parseInt(document.getElementById('hoursPerDay').value, 10),
@@ -334,11 +343,11 @@ async function handleFormSubmit(e) {
         formMessage.textContent = 'Registration successful! Applicant ID: ' + result.applicantId;
         formMessage.className = 'form-message text-success';
         document.getElementById('volunteerForm').reset();
-        
+
         // Reset custom language tags
         selectedLanguagesList = [];
         document.getElementById('selectedLanguages').innerHTML = '';
-        
+
         if (document.getElementById('adminDashboard').style.display === 'block') {
             fetchApplicants();
         }
@@ -436,7 +445,7 @@ async function fetchApplicants() {
 function renderApplicants() {
     const tableBody = document.getElementById('applicantsTableBody');
     const searchQuery = document.getElementById('adminSearch').value.toLowerCase();
-    
+
     // Filter
     let filtered = allApplicants.filter(app => {
         const fullName = `${app.firstName} ${app.lastName}`.toLowerCase();
@@ -466,7 +475,7 @@ function renderApplicants() {
         const row = document.createElement('tr');
         const skillsLen = app.skills ? app.skills.length : 0;
         const intLen = app.interests ? app.interests.length : 0;
-        
+
         row.innerHTML = `
             <td style="text-align: center;"><input type="checkbox" class="row-select" value="${app.applicantId}" ${selectedApplicants.has(app.applicantId.toString()) ? 'checked' : ''}></td>
             <td>${app.applicantId}</td>
@@ -503,7 +512,7 @@ function renderApplicants() {
 // Setup Admin Dashboard UI
 function setupAdminDashboard() {
     document.getElementById('adminSearch').addEventListener('input', renderApplicants);
-    
+
     document.querySelectorAll('.sortable').forEach(th => {
         th.addEventListener('click', () => {
             const col = th.getAttribute('data-sort');
@@ -518,7 +527,7 @@ function setupAdminDashboard() {
     });
 
     document.getElementById('btnRefreshApplicants').addEventListener('click', fetchApplicants);
-    
+
     // Select All Logic
     const selectAllCb = document.getElementById('selectAllApplicants');
     if (selectAllCb) {
@@ -552,7 +561,7 @@ function setupAdminDashboard() {
             try {
                 // We need to send the X-Role: ADMIN header to authorize the delete
                 await Promise.all(selected.map(async (id) => {
-                    const res = await fetch(`${API_BASE}/applicants/${id}`, { 
+                    const res = await fetch(`${API_BASE}/applicants/${id}`, {
                         method: 'DELETE',
                         headers: { 'X-Role': 'ADMIN' }
                     });
@@ -576,14 +585,14 @@ function setupAdminDashboard() {
 // Edit Applicant (Modal)
 let currentEditingId = null;
 
-window.editApplicant = function(id) {
+window.editApplicant = function (id) {
     const app = allApplicants.find(a => a.applicantId === id);
     if (!app) return;
-    
+
     currentEditingId = id;
     const modal = document.getElementById('editApplicantModal');
     const content = document.getElementById('editFormContent');
-    
+
     // We create a dynamically generated form snippet just for editing core details
     // In a real app we'd map all 25+ fields, here we show a representative subset
     content.innerHTML = `
@@ -643,7 +652,7 @@ window.editApplicant = function(id) {
         </div>
         <div class="form-group margin-bottom-20">
             <label>Mobile Phone</label>
-            <input type="tel" id="editMobile" value="${app.mobilePhone || ''}">
+            <input type="tel" id="editMobile" value="${app.mobilePhone || ''}" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length !== 11 && this.value.length > 0) { this.setCustomValidity('Must be exactly 11 digits'); } else { this.setCustomValidity(''); }">
         </div>
         <div class="form-group margin-bottom-20">
             <label>Phone/Landline</label>
@@ -824,7 +833,7 @@ window.editApplicant = function(id) {
         </div>
         <div class="form-group margin-bottom-20">
             <label>Contact Mobile Phone</label>
-            <input type="tel" id="editContactPhone" value="${app.contactPhoneNo || ''}">
+            <input type="tel" id="editContactPhone" value="${app.contactPhoneNo || ''}" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length !== 11 && this.value.length > 0) { this.setCustomValidity('Must be exactly 11 digits'); } else { this.setCustomValidity(''); }">
         </div>
         <div class="form-group margin-bottom-20 span-3">
             <label>Contact Address</label>
@@ -847,7 +856,7 @@ window.editApplicant = function(id) {
             <input type="text" id="editPosition" value="${app.position || ''}">
         </div>
     `;
-    
+
     modal.style.display = 'flex';
 
     // Set up languages tag input for the modal
@@ -874,7 +883,7 @@ window.editApplicant = function(id) {
     const renderEditDropdown = (query = '') => {
         editDropdown.innerHTML = '';
         const lowerQuery = query.toLowerCase();
-        
+
         const filtered = availableLanguages
             .filter(lang => {
                 if (window.editSelectedLanguagesList.includes(lang)) return false;
@@ -893,7 +902,7 @@ window.editApplicant = function(id) {
             const div = document.createElement('div');
             div.textContent = lang;
             div.addEventListener('mousedown', (e) => {
-                e.preventDefault(); 
+                e.preventDefault();
                 if (!window.editSelectedLanguagesList.includes(lang)) {
                     window.editSelectedLanguagesList.push(lang);
                     renderEditTags();
@@ -925,13 +934,24 @@ window.editApplicant = function(id) {
 // Save Edit
 document.getElementById('btnSaveEdit').addEventListener('click', async () => {
     if (!currentEditingId) return;
-    
+
     // Find original app to preserve fields we didn't put in the modal
     const original = allApplicants.find(a => a.applicantId === currentEditingId);
-    
+
     const editSkillCodes = getSelectedCheckboxes('editSkillCodes');
     const editInterestCodes = getSelectedCheckboxes('editInterestCodes');
+    const editMobilePhoneVal = document.getElementById('editMobile').value.trim();
+    if (!/^\d{11}$/.test(editMobilePhoneVal)) {
+        alert("Please enter exactly 11 digits for the mobile phone number.");
+        return;
+    }
     
+    const editContactPhoneVal = document.getElementById('editContactPhone').value.trim();
+    if (!/^\d{11}$/.test(editContactPhoneVal)) {
+        alert("Please enter exactly 11 digits for the emergency contact mobile phone number.");
+        return;
+    }
+
     if (editSkillCodes.length === 0) {
         alert("Please select at least one skill.");
         return;
@@ -1029,7 +1049,7 @@ function setupCustomDropdowns() {
         if (trigger) {
             const container = trigger.closest('.custom-select-container');
             const options = container.querySelector('.custom-select-options');
-            
+
             // Close others
             document.querySelectorAll('.custom-select-options').forEach(opt => {
                 if (opt !== options) opt.classList.remove('open');
@@ -1045,12 +1065,12 @@ function setupCustomDropdowns() {
             const triggerText = container.querySelector('.custom-select-trigger span:first-child');
             const input = container.querySelector('input[type="hidden"]');
             const trigger = container.querySelector('.custom-select-trigger');
-            
+
             triggerText.textContent = option.textContent;
             input.value = option.getAttribute('data-value');
             trigger.classList.add('has-value');
             option.parentElement.classList.remove('open');
-            
+
             input.dispatchEvent(new Event('change', { bubbles: true }));
         }
     });
@@ -1086,7 +1106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAdminLogin();
     setupAdminDashboard();
     setupCustomDropdowns();
-    
+
     // Days of the week logic
     const availOption = document.getElementById('availabilityOption');
     const daysInput = document.getElementById('daysOfWeekInput');

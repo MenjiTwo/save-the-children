@@ -101,7 +101,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="mobilePhone">Mobile Phone *</label>
-                                    <input type="tel" id="mobilePhone" name="mobilePhone" required>
+                                    <input type="tel" id="mobilePhone" name="mobilePhone" required maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length !== 11 && this.value.length > 0) { this.setCustomValidity('Must be exactly 11 digits'); } else { this.setCustomValidity(''); }">
                                 </div>
                                 <div class="form-group">
                                     <label for="phoneLandline">Phone/Landline</label>
@@ -296,7 +296,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="contactPhoneNo">Contact Mobile Phone *</label>
-                                    <input type="tel" id="contactPhoneNo" name="contactPhoneNo" required>
+                                    <input type="tel" id="contactPhoneNo" name="contactPhoneNo" required maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length !== 11 && this.value.length > 0) { this.setCustomValidity('Must be exactly 11 digits'); } else { this.setCustomValidity(''); }">
                                 </div>
                                 <div class="form-group span-3">
                                     <label for="contactAddress">Contact Address *</label>
