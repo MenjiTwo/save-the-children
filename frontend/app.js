@@ -15,7 +15,63 @@ async function fetchLanguages() {
         if (response.ok) {
             const data = await response.json();
             // The API returns an object { "en": "English", ... }. We want just the names.
-            availableLanguages = Object.values(data).filter(lang => lang !== 'Filipino');
+            // Remove redundant language variants — keep only the primary language name.
+            // For example: keep "English" but remove "American English", "British English", etc.
+            // Keep "Tagalog" but remove "Filipino" (same language).
+            const redundantLanguages = new Set([
+                // Filipino (redundant with Tagalog)
+                'Filipino',
+                // English variants
+                'American English', 'Australian English', 'British English',
+                'Canadian English', 'Middle English', 'Old English',
+                'Jamaican Creole English',
+                // Chinese variants (keep "Chinese" as the umbrella term)
+                'Simplified Chinese', 'Traditional Chinese', 'Literary Chinese',
+                'Gan Chinese', 'Hakka Chinese', 'Min Nan Chinese',
+                'Wu Chinese', 'Xiang Chinese',
+                // French variants
+                'Cajun French', 'Canadian French', 'Middle French',
+                'Old French', 'Swiss French',
+                // Spanish variants
+                'European Spanish', 'Latin American Spanish', 'Mexican Spanish',
+                // Portuguese variants
+                'Brazilian Portuguese', 'European Portuguese',
+                // Arabic variants
+                'Algerian Arabic', 'Chadian Arabic', 'Egyptian Arabic',
+                'Modern Standard Arabic', 'Moroccan Arabic', 'Tunisian Arabic',
+                'Judeo-Arabic',
+                // German variants
+                'Austrian German', 'Middle High German', 'Old High German',
+                'Palatine German', 'Pennsylvania German', 'Swiss German',
+                'Swiss High German', 'Low German',
+                // Turkish variants
+                'Crimean Turkish', 'Ottoman Turkish',
+                // Persian variants
+                'Old Persian', 'Judeo-Persian',
+                // Norwegian variants
+                'Norwegian Bokmål', 'Norwegian Nynorsk',
+                // Dutch variants
+                'Flemish', 'Middle Dutch', 'West Flemish',
+                // Greek variants
+                'Ancient Greek',
+                // Kurdish variants
+                'Central Kurdish',
+                // Azerbaijani variants
+                'South Azerbaijani',
+                // Serbian/Croatian overlap
+                'Serbo-Croatian',
+                // Swahili variants
+                'Congo Swahili',
+                // Hindi variants
+                'Fiji Hindi',
+                // Sami variants (keep "Northern Sami" as most common, remove sub-variants)
+                'Inari Sami', 'Lule Sami', 'Skolt Sami', 'Southern Sami',
+                // Frisian variants (keep "Western Frisian" as primary)
+                'Eastern Frisian', 'Northern Frisian', 'Saterland Frisian',
+                // Sorbian variants
+                'Lower Sorbian', 'Upper Sorbian'
+            ]);
+            availableLanguages = Object.values(data).filter(lang => !redundantLanguages.has(lang));
             setupLanguageSearch();
         }
     } catch (e) {
